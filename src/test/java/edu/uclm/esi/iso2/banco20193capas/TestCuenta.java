@@ -9,7 +9,10 @@ import org.springframework.test.context.junit4.SpringRunner;
 import edu.uclm.esi.iso2.banco20193capas.model.Cuenta;
 import edu.uclm.esi.iso2.banco20193capas.model.Manager;
 import edu.uclm.esi.iso2.banco20193capas.exceptions.CuentaSinTitularesException;
+import edu.uclm.esi.iso2.banco20193capas.exceptions.CuentaYaCreadaException;
+import edu.uclm.esi.iso2.banco20193capas.exceptions.ImporteInvalidoException;
 import edu.uclm.esi.iso2.banco20193capas.exceptions.PinInvalidoException;
+import edu.uclm.esi.iso2.banco20193capas.exceptions.SaldoInsuficienteException;
 import edu.uclm.esi.iso2.banco20193capas.model.Cliente;
 import edu.uclm.esi.iso2.banco20193capas.model.Tarjeta;
 import edu.uclm.esi.iso2.banco20193capas.model.TarjetaCredito;
@@ -30,12 +33,33 @@ public class TestCuenta extends TestCase {
 	}
 	
 	@Test
+	public void testRetiradaSinSaldo() {
+		Cliente pepe = new Cliente("12345X", "Pepe", "Pérez");
+		pepe.insert();
+		Cuenta cuentaPepe = new Cuenta(1);
+		try {
+			cuentaPepe.addTitular(pepe);
+			cuentaPepe.insert();
+			cuentaPepe.ingresar(1000);
+		} catch (Exception e) {
+			fail("Excepción inesperada: " + e);
+		}
+		try {
+			cuentaPepe.retirar(2000);
+			fail("Esperaba SaldoInsuficienteException");
+		} catch (ImporteInvalidoException e) {
+			fail("Se ha producido ImporteInvalidoException");
+		} catch (SaldoInsuficienteException e) {
+		}
+	}
+	
+	@Test
 	public void testCreacionDeUnaCuenta() {
 		try {
 			Cliente pepe = new Cliente("12345X", "Pepe", "Pérez");
 			pepe.insert();
 			
-			Cuenta cuentaPepe = new Cuenta();
+			Cuenta cuentaPepe = new Cuenta(1);
 			cuentaPepe.addTitular(pepe);
 			cuentaPepe.insert();
 			cuentaPepe.ingresar(1000);
@@ -50,7 +74,7 @@ public class TestCuenta extends TestCase {
 		Cliente pepe = new Cliente("12345X", "Pepe", "Pérez");
 		pepe.insert();
 		
-		Cuenta cuentaPepe = new Cuenta();
+		Cuenta cuentaPepe = new Cuenta(1);
 		
 		try {
 			cuentaPepe.insert();
@@ -67,8 +91,8 @@ public class TestCuenta extends TestCase {
 		Cliente ana = new Cliente("98765F", "Ana", "López");
 		ana.insert();
 		
-		Cuenta cuentaPepe = new Cuenta();
-		Cuenta cuentaAna = new Cuenta();
+		Cuenta cuentaPepe = new Cuenta(1);
+		Cuenta cuentaAna = new Cuenta(2);
 		try {
 			cuentaPepe.addTitular(pepe);
 			cuentaPepe.insert();
@@ -91,7 +115,7 @@ public class TestCuenta extends TestCase {
 		Cliente pepe = new Cliente("12345X", "Pepe", "Pérez");
 		pepe.insert();
 		
-		Cuenta cuentaPepe = new Cuenta();
+		Cuenta cuentaPepe = new Cuenta(1);
 		try {
 			cuentaPepe.addTitular(pepe);
 			cuentaPepe.insert();
@@ -116,7 +140,7 @@ public class TestCuenta extends TestCase {
 		Cliente pepe = new Cliente("12345X", "Pepe", "Pérez");
 		pepe.insert();
 		
-		Cuenta cuentaPepe = new Cuenta();
+		Cuenta cuentaPepe = new Cuenta(1);
 		try {
 			cuentaPepe.addTitular(pepe);
 			cuentaPepe.insert();

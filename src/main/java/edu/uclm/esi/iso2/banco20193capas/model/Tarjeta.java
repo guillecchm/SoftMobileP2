@@ -43,6 +43,7 @@ public abstract class Tarjeta {
 	
 	public Tarjeta() {
 		activa = true;
+		this.intentos = 0;
 		SecureRandom dado = new SecureRandom();
 		pin = 0;
 		for (int i=0; i<=3; i++)

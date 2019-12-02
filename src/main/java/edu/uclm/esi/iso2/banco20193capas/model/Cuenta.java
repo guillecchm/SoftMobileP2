@@ -4,11 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToMany;
 
@@ -28,7 +25,6 @@ import edu.uclm.esi.iso2.banco20193capas.exceptions.SaldoInsuficienteException;
 @Entity
 public class Cuenta {
 	@Id 
-	@GeneratedValue(strategy = GenerationType.AUTO)
 	protected Long id;
 
 	@ManyToMany(fetch = FetchType.EAGER)
@@ -38,6 +34,15 @@ public class Cuenta {
 		
 	public Cuenta() {
 		this.titulares=new ArrayList<>();
+	}
+	
+	public Cuenta(Long id) {
+		this();
+		this.id=id;
+	}
+	
+	public Cuenta(Integer id) {
+		this(new Long(id));
 	}
 	
 	/**
@@ -107,6 +112,8 @@ public class Cuenta {
 	 * @throws SaldoInsuficienteException	Si la cuenta no tiene saldo suficiente para afrontar el importe y la comisión
 	 */
 	public void transferir(Long numeroCuentaDestino, double importe, String concepto) throws CuentaInvalidaException, ImporteInvalidoException, SaldoInsuficienteException {
+		if (this.getId().equals(numeroCuentaDestino))
+			throw new CuentaInvalidaException(numeroCuentaDestino);
 		this.retirar(importe, "Transferencia emitida");
 		double comision = Math.max(0.01*importe, 1.5);
 		this.retirar(comision, "Comisión por transferencia");
