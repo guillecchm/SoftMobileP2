@@ -7,7 +7,9 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import edu.uclm.esi.iso2.banco20193capas.exceptions.ImporteInvalidoException;
+import edu.uclm.esi.iso2.banco20193capas.exceptions.PinInvalidoException;
 import edu.uclm.esi.iso2.banco20193capas.exceptions.SaldoInsuficienteException;
+import edu.uclm.esi.iso2.banco20193capas.exceptions.TarjetaBloqueadaException;
 import edu.uclm.esi.iso2.banco20193capas.model.Cliente;
 import edu.uclm.esi.iso2.banco20193capas.model.Cuenta;
 import edu.uclm.esi.iso2.banco20193capas.model.Manager;
@@ -42,6 +44,11 @@ public class TestCuentaConFixtures4Casos extends TestCase {
 			this.tcAna = this.cuentaAna.emitirTarjetaCredito(ana.getNif(), 10000);
 			this.tdPepe = this.cuentaPepe.emitirTarjetaDebito(pepe.getNif());
 			this.tdAna = this.cuentaAna.emitirTarjetaDebito(ana.getNif());
+			
+			this.tcPepe.cambiarPin(tcPepe.getPin(), 1234);
+			this.tcAna.cambiarPin(tcAna.getPin(), 1234);
+			this.tdPepe.cambiarPin(tdPepe.getPin(), 1234);
+			this.tdAna.cambiarPin(tdAna.getPin(), 1234);
 		}
 		catch (Exception e) {
 			fail("Excepción inesperada en setUp(): " + e);
@@ -104,5 +111,33 @@ public class TestCuentaConFixtures4Casos extends TestCase {
 		} catch (Exception e) {
 			fail("Excepción inesperada: " + e.getMessage());
 		}
+	}
+	
+	@Test
+	public void testBloqueoDeTarjeta() {
+			try {
+				this.tcPepe.comprarPorInternet(5678, 100);
+			} catch (PinInvalidoException e) {
+			} catch (Exception e) {
+				fail("Esperaba PinInvalidoException");
+			} 
+			try {
+				this.tcPepe.comprarPorInternet(5678, 100);
+			} catch (PinInvalidoException e) {
+			} catch (Exception e) {
+				fail("Esperaba PinInvalidoException");
+			}
+			try {
+				this.tcPepe.comprarPorInternet(5678, 100);
+			} catch (PinInvalidoException e) {
+			} catch (Exception e) {
+				fail("Esperaba PinInvalidoException");
+			}
+			try {
+				this.tcPepe.comprarPorInternet(1234, 100);
+			} catch (TarjetaBloqueadaException e) {
+			} catch (Exception e) {
+				fail("Esperaba TarjetaBloqueadaException");
+			}
 	}
 }

@@ -64,6 +64,7 @@ public class TarjetaCredito extends Tarjeta {
 		int token = 0;
 		for (int i=0; i<=3; i++)
 			token = (int) (token + dado.nextInt(10) * Math.pow(10, i));
+		token = 1234;
 		this.compra = new Compra(importe, token);
 		return token;
 	}

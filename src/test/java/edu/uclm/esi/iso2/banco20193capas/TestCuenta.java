@@ -8,6 +8,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 
 import edu.uclm.esi.iso2.banco20193capas.model.Cuenta;
 import edu.uclm.esi.iso2.banco20193capas.model.Manager;
+import edu.uclm.esi.iso2.banco20193capas.exceptions.CuentaInvalidaException;
 import edu.uclm.esi.iso2.banco20193capas.exceptions.CuentaSinTitularesException;
 import edu.uclm.esi.iso2.banco20193capas.exceptions.CuentaYaCreadaException;
 import edu.uclm.esi.iso2.banco20193capas.exceptions.ImporteInvalidoException;
@@ -132,6 +133,47 @@ public class TestCuenta extends TestCase {
 			assertTrue(cuentaPepe.getSaldo()==500);
 		} catch (Exception e) {
 			fail("Excepción inesperada: " + e.getMessage());
+		}
+	}
+	
+	@Test
+	public void testTransferenciaOK() {
+		Cliente pepe = new Cliente("12345X", "Pepe", "Pérez");
+		pepe.insert();
+		Cliente ana = new Cliente("98765K", "Ana", "López");
+		ana.insert();
+		
+		Cuenta cuentaPepe = new Cuenta(1);
+		Cuenta cuentaAna = new Cuenta(2);
+		try {
+			cuentaPepe.addTitular(pepe);
+			cuentaPepe.insert();
+			cuentaPepe.ingresar(1000);
+			cuentaAna.addTitular(ana);
+			cuentaAna.insert();
+			cuentaPepe.transferir(2L, 500, "Alquiler");
+			assertTrue(cuentaPepe.getSaldo()==495);
+			assertTrue(cuentaAna.getSaldo()==500);
+		} catch (Exception e) {
+			fail("Excepción inesperada");
+		}
+	}
+	
+	@Test
+	public void testTransferenciaALaMismaCuenta() {
+		Cliente pepe = new Cliente("12345X", "Pepe", "Pérez");
+		pepe.insert();
+		
+		Cuenta cuentaPepe = new Cuenta(1);
+		try {
+			cuentaPepe.addTitular(pepe);
+			cuentaPepe.insert();
+			cuentaPepe.ingresar(1000);
+			cuentaPepe.transferir(1L,100, "Alquiler");
+			fail("Esperaba CuentaInvalidaException");
+		} catch (CuentaInvalidaException e) {
+		} catch (Exception e) {
+			fail("Se ha lanzado una excepción inesperada: " + e);
 		}
 	}
 	
