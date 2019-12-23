@@ -6,6 +6,8 @@ import org.junit.runner.RunWith;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
+import edu.uclm.esi.iso2.banco20193capas.exceptions.ClienteNoAutorizadoException;
+import edu.uclm.esi.iso2.banco20193capas.exceptions.ClienteNoEncontradoException;
 import edu.uclm.esi.iso2.banco20193capas.exceptions.ImporteInvalidoException;
 import edu.uclm.esi.iso2.banco20193capas.exceptions.PinInvalidoException;
 import edu.uclm.esi.iso2.banco20193capas.exceptions.SaldoInsuficienteException;
@@ -114,7 +116,7 @@ public class TestCuentaConFixtures4Casos extends TestCase {
 	}
 	
 	@Test
-	public void testBloqueoDeTarjeta() {
+	public void testBloqueoDeTarjetaCredito() {
 			try {
 				this.tcPepe.comprarPorInternet(5678, 100);
 			} catch (PinInvalidoException e) {
