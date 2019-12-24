@@ -50,7 +50,7 @@ public abstract class Tarjeta {
 			pin = (int) (pin + dado.nextInt(10) * Math.pow(10, i));	
 	}
 	
-	protected void comprobar(int pin) throws TarjetaBloqueadaException, PinInvalidoException {
+	public void comprobar(int pin) throws TarjetaBloqueadaException, PinInvalidoException {
 		if (!this.isActiva())
 			throw new TarjetaBloqueadaException();
 		if (this.pin!=pin) {
