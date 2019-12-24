@@ -1,17 +1,15 @@
 package edu.uclm.esi.iso2.banco20193capas;
 
+
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
-import edu.uclm.esi.iso2.banco20193capas.exceptions.ClienteNoAutorizadoException;
-import edu.uclm.esi.iso2.banco20193capas.exceptions.ClienteNoEncontradoException;
+import edu.uclm.esi.iso2.banco20193capas.exceptions.CuentaInvalidaException;
 import edu.uclm.esi.iso2.banco20193capas.exceptions.ImporteInvalidoException;
-import edu.uclm.esi.iso2.banco20193capas.exceptions.PinInvalidoException;
 import edu.uclm.esi.iso2.banco20193capas.exceptions.SaldoInsuficienteException;
-import edu.uclm.esi.iso2.banco20193capas.exceptions.TarjetaBloqueadaException;
 import edu.uclm.esi.iso2.banco20193capas.model.Cliente;
 import edu.uclm.esi.iso2.banco20193capas.model.Cuenta;
 import edu.uclm.esi.iso2.banco20193capas.model.Manager;
@@ -21,7 +19,7 @@ import junit.framework.TestCase;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
-public class TestCuentaConFixtures4Casos extends TestCase {
+public class Test_Joel extends TestCase {
 	private Cuenta cuentaPepe, cuentaAna;
 	private Cliente pepe, ana;
 	private TarjetaDebito tdPepe, tdAna;
@@ -57,20 +55,9 @@ public class TestCuentaConFixtures4Casos extends TestCase {
 		}
 	}
 	
+	/*Test de transferencias*/
 	@Test
-	public void testRetiradaSinSaldo() {
-		try {
-			this.cuentaPepe.retirar(2000);
-			fail("Esperaba SaldoInsuficienteException");
-		} catch (ImporteInvalidoException e) {
-			fail("Se ha producido ImporteInvalidoException");
-		} catch (SaldoInsuficienteException e) {
-		}
-	}
-	
-
-	@Test
-	public void testTransferencia() {
+	public void testTransferenciaOK() {
 		try {
 			this.cuentaPepe.transferir(this.cuentaAna.getId(), 500, "Alquiler");
 			assertTrue(this.cuentaPepe.getSaldo() == 495);
@@ -81,65 +68,95 @@ public class TestCuentaConFixtures4Casos extends TestCase {
 	}
 	
 	@Test
-	public void testCompraConTC() {
+	public void testTransferenciaALaMismaCuenta() {
+
 		try {
-			cuentaPepe.retirar(200);
-			assertTrue(cuentaPepe.getSaldo()==800);
-			
-			TarjetaCredito tc = cuentaPepe.emitirTarjetaCredito("12345X", 1000);
-			tc.comprar(tc.getPin(), 300);
-			assertTrue(tc.getCreditoDisponible()==700);
-			tc.liquidar();
-			assertTrue(tc.getCreditoDisponible()==1000);
-			assertTrue(cuentaPepe.getSaldo()==500);
+			cuentaPepe.transferir(1L,100, "Alquiler");
+			fail("Esperaba CuentaInvalidaException");
+		} catch (CuentaInvalidaException e) {
 		} catch (Exception e) {
-			fail("Excepción inesperada: " + e.getMessage());
+			fail("Se ha lanzado una excepción inesperada: " + e);
 		}
 	}
+	/*FIN Test de transferencias*/
 	
+	/*Test compra por internet con tarjeta de crédito*/
 	@Test
 	public void testCompraPorInternetConTC() {
 		try {
-			this.cuentaPepe.retirar(200);
-			assertTrue(this.cuentaPepe.getSaldo()==800);
-			
 			int token = this.tcPepe.comprarPorInternet(tcPepe.getPin(), 300);
 			assertTrue(this.tcPepe.getCreditoDisponible()==2000);
 			this.tcPepe.confirmarCompraPorInternet(token);
 			assertTrue(this.tcPepe.getCreditoDisponible()==1700);
 			this.tcPepe.liquidar();
 			assertTrue(this.tcPepe.getCreditoDisponible()==2000);
-			assertTrue(cuentaPepe.getSaldo()==500);
+			assertTrue(cuentaPepe.getSaldo()==700);
 		} catch (Exception e) {
 			fail("Excepción inesperada: " + e.getMessage());
 		}
 	}
 	
 	@Test
-	public void testBloqueoDeTarjetaCredito() {
-			try {
-				this.tcPepe.comprarPorInternet(5678, 100);
-			} catch (PinInvalidoException e) {
-			} catch (Exception e) {
-				fail("Esperaba PinInvalidoException");
-			} 
-			try {
-				this.tcPepe.comprarPorInternet(5678, 100);
-			} catch (PinInvalidoException e) {
-			} catch (Exception e) {
-				fail("Esperaba PinInvalidoException");
-			}
-			try {
-				this.tcPepe.comprarPorInternet(5678, 100);
-			} catch (PinInvalidoException e) {
-			} catch (Exception e) {
-				fail("Esperaba PinInvalidoException");
-			}
-			try {
-				this.tcPepe.comprarPorInternet(1234, 100);
-			} catch (TarjetaBloqueadaException e) {
-			} catch (Exception e) {
-				fail("Esperaba TarjetaBloqueadaException");
-			}
+	public void testCompraPorInternetConTCCreditoInsuficiente() {
+		try {
+			int token = this.tcPepe.comprarPorInternet(tcPepe.getPin(), 2001);
+			fail("Se esperaba - SaldoInsuficienteException");
+		} catch (SaldoInsuficienteException e) {
+			
+		} catch (Exception e) {
+			fail("Excepción inesperada: " + e.getMessage());
+		}
 	}
+	
+	@Test
+	public void testCompraPorInternetConTCImporteIncorrecto() {
+		try {
+			int token = this.tcPepe.comprarPorInternet(tcPepe.getPin(), 0);
+			fail("Se esperaba - ImporteInvalidoException");
+		} catch (ImporteInvalidoException e) {
+			
+		} catch (Exception e) {
+			fail("Excepción inesperada: " + e.getMessage());
+		}
+	}
+	/*FIN Test compra por internet con tarjeta de crédito*/
+	
+	/*Test compra por internet con tarjeta de débito*/
+	@Test
+	public void testCompraPorInternetConTD() {
+		try {
+			int token = this.tdPepe.comprarPorInternet(tdPepe.getPin(), 300);
+			this.tdPepe.confirmarCompraPorInternet(token);
+			assertTrue(cuentaPepe.getSaldo()==700);
+		} catch (Exception e) {
+			fail("Excepción inesperada: " + e.getMessage());
+		}
+	}
+	
+	@Test
+	public void testCompraPorInternetConTDImporteIncorrecto() {
+		try {
+			int token = this.tdPepe.comprarPorInternet(tcPepe.getPin(), 0);
+			this.tdPepe.confirmarCompraPorInternet(token);
+			fail("Se esperaba - ImporteInvalidoException");
+		} catch (ImporteInvalidoException e) {
+			
+		} catch (Exception e) {
+			fail("Excepción inesperada: " + e.getMessage());
+		}
+	}
+	
+	@Test
+	public void testCompraPorInternetConTDSaldoInsuficiente() {
+		try {
+			int token = this.tdPepe.comprarPorInternet(tcPepe.getPin(), 1001);
+			this.tdPepe.confirmarCompraPorInternet(token);
+			fail("Se esperaba - SaldoInsuficienteException");
+		} catch (SaldoInsuficienteException e) {
+			
+		} catch (Exception e) {
+			fail("Excepción inesperada: " + e.getMessage());
+		}
+	}
+	/*FIN Test compra por internet con tarjeta de débito*/
 }
