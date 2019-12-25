@@ -15,6 +15,7 @@ import edu.uclm.esi.iso2.banco20193capas.exceptions.CuentaYaCreadaException;
 import edu.uclm.esi.iso2.banco20193capas.exceptions.ImporteInvalidoException;
 import edu.uclm.esi.iso2.banco20193capas.exceptions.PinInvalidoException;
 import edu.uclm.esi.iso2.banco20193capas.exceptions.SaldoInsuficienteException;
+import edu.uclm.esi.iso2.banco20193capas.exceptions.TarjetaBloqueadaException;
 import edu.uclm.esi.iso2.banco20193capas.model.Cliente;
 import edu.uclm.esi.iso2.banco20193capas.model.Tarjeta;
 import edu.uclm.esi.iso2.banco20193capas.model.TarjetaCredito;
@@ -48,7 +49,7 @@ public class TestLucía extends TestCase{
 			this.cuentaVarian.addTitular(varian);
 			this.cuentaVarian.insert();
 			this.cuentaVarian.ingresar(20000);
-			this.tarjetaCVarian = this.cuentaVarian.emitirTarjetaCredito(varian.getNif(), 2000);
+			this.tarjetaCVarian = this.cuentaVarian.emitirTarjetaCredito(varian.getNif(), 0);
 			this.tarjetaCVarian.cambiarPin(this.tarjetaCVarian.getPin(), 1234);
 			this.tarjetaDVarian = this.cuentaVarian.emitirTarjetaDebito(varian.getNif());
 			this.tarjetaDVarian.cambiarPin(this.tarjetaDVarian.getPin(), 1234);
@@ -58,23 +59,59 @@ public class TestLucía extends TestCase{
 	}
 	
 	@Test
-	public void testSacarDineroC() {
-		
+	public void testSacarDineroCImporteNulo() {
+		try {
+			this.tarjetaCVarian.sacarDinero(1234, 0.0);
+		} catch (ImporteInvalidoException e) {
+			fail("Importe inválido: " + e.getMessage());
+		} catch (SaldoInsuficienteException | TarjetaBloqueadaException | PinInvalidoException e) {
+			fail("Una excepción: " + e.getMessage());
+		}
 	}
 	
 	@Test
-	public void testSacarDineroD() {
-		int pin = 1234;
-		int importe = 20;
+	public void testSacarDineroCImporteExacto() {
 		try {
-			this.tarjetaDVarian.comprobar(pin);
-			assertTrue(pin == tarjetaDVarian.getPin());
-			this.tarjetaDVarian.cuenta.retirar(importe);
-			assertTrue(tarjetaDVarian.getCuenta().getSaldo() == 19980);
-		} catch (Exception e) {
-			fail("Excepción inesperada: " + e.getMessage());
+			this.tarjetaCVarian.sacarDinero(1234, 20000);
+			assertTrue(this.tarjetaCVarian.getCuenta().getSaldo() == 0.0);
+		} catch (ImporteInvalidoException e) {
+			fail("Importe inválido: " + e.getMessage());
+		} catch (SaldoInsuficienteException | TarjetaBloqueadaException | PinInvalidoException e) {
+			fail("Una excepción: " + e.getMessage());
 		}
-	}	
+	}
+	
+	@Test
+	public void testSacarDineroDImporteNulo() {
+		try {
+			this.tarjetaDVarian.sacarDinero(1234, 0.0);
+		} catch (TarjetaBloqueadaException | SaldoInsuficienteException | PinInvalidoException e) {
+			fail("Una excepción: " + e.getMessage());
+		} catch (ImporteInvalidoException e) {
+			fail("Importe inválido: " + e.getMessage());
+		}
+	}
+	
+	@Test
+	public void testSacarDineroDImporteExacto() {
+		try {
+			this.tarjetaDVarian.sacarDinero(1234, 20000);
+			assertTrue(this.tarjetaDVarian.getCuenta().getSaldo() == 0.0);
+		} catch (TarjetaBloqueadaException | SaldoInsuficienteException | PinInvalidoException | ImporteInvalidoException e) {
+			fail("Una excepción: " + e.getMessage());
+		}
+	}
+	
+	@Test
+	public void testSacarDineroDImporteDemasiadoGrande() {
+		try {
+			this.tarjetaDVarian.sacarDinero(1234, 99999);
+		} catch (TarjetaBloqueadaException | PinInvalidoException | ImporteInvalidoException e) {
+			fail("Una excepción: " + e.getMessage());
+		} catch ( SaldoInsuficienteException e) {
+			fail("Saldo insuficiente: " + e.getMessage());
+		}
+	}
 	
 	
 	@Test

@@ -30,7 +30,7 @@ public abstract class Tarjeta {
 	
 	protected Integer pin;
 	protected Boolean activa;
-	protected Integer intentos;
+	public Integer intentos;
 
 	@Transient
 	protected Compra compra;
