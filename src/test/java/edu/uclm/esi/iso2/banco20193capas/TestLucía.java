@@ -49,7 +49,7 @@ public class TestLucía extends TestCase{
 			this.cuentaVarian.addTitular(varian);
 			this.cuentaVarian.insert();
 			this.cuentaVarian.ingresar(20000);
-			this.tarjetaCVarian = this.cuentaVarian.emitirTarjetaCredito(varian.getNif(), 0);
+			this.tarjetaCVarian = this.cuentaVarian.emitirTarjetaCredito(varian.getNif(), 20000);
 			this.tarjetaCVarian.cambiarPin(this.tarjetaCVarian.getPin(), 1234);
 			this.tarjetaDVarian = this.cuentaVarian.emitirTarjetaDebito(varian.getNif());
 			this.tarjetaDVarian.cambiarPin(this.tarjetaDVarian.getPin(), 1234);
@@ -62,9 +62,10 @@ public class TestLucía extends TestCase{
 	public void testSacarDineroCImporteNulo() {
 		try {
 			this.tarjetaCVarian.sacarDinero(1234, 0.0);
+			fail("Se esperaba ImporteInvalidoException");
 		} catch (ImporteInvalidoException e) {
-			fail("Importe inválido: " + e.getMessage());
-		} catch (SaldoInsuficienteException | TarjetaBloqueadaException | PinInvalidoException e) {
+			
+		} catch (Exception e) {
 			fail("Una excepción: " + e.getMessage());
 		}
 	}
@@ -72,12 +73,12 @@ public class TestLucía extends TestCase{
 	@Test
 	public void testSacarDineroCImporteExacto() {
 		try {
-			this.tarjetaCVarian.sacarDinero(1234, 20000);
+			this.tarjetaCVarian.sacarDinero(1234, 19997);
+			this.tarjetaCVarian.liquidar();
+			assertTrue(this.tarjetaCVarian.getCredito()==20000);
 			assertTrue(this.tarjetaCVarian.getCuenta().getSaldo() == 0.0);
-		} catch (ImporteInvalidoException e) {
-			fail("Importe inválido: " + e.getMessage());
-		} catch (SaldoInsuficienteException | TarjetaBloqueadaException | PinInvalidoException e) {
-			fail("Una excepción: " + e.getMessage());
+		} catch (Exception e) {
+			fail("No se esperaba excepcion");
 		}
 	}
 	
@@ -85,10 +86,11 @@ public class TestLucía extends TestCase{
 	public void testSacarDineroDImporteNulo() {
 		try {
 			this.tarjetaDVarian.sacarDinero(1234, 0.0);
-		} catch (TarjetaBloqueadaException | SaldoInsuficienteException | PinInvalidoException e) {
-			fail("Una excepción: " + e.getMessage());
+			fail("Se esperaba ImporteInvalidoException");
 		} catch (ImporteInvalidoException e) {
-			fail("Importe inválido: " + e.getMessage());
+			
+		} catch (Exception e) {
+			fail("Se esperaba ImporteInvalidoException" + e.getMessage());
 		}
 	}
 	
@@ -97,8 +99,8 @@ public class TestLucía extends TestCase{
 		try {
 			this.tarjetaDVarian.sacarDinero(1234, 20000);
 			assertTrue(this.tarjetaDVarian.getCuenta().getSaldo() == 0.0);
-		} catch (TarjetaBloqueadaException | SaldoInsuficienteException | PinInvalidoException | ImporteInvalidoException e) {
-			fail("Una excepción: " + e.getMessage());
+		} catch (Exception e) {
+			fail("No se espera excepción: " + e.getMessage());
 		}
 	}
 	
@@ -106,23 +108,37 @@ public class TestLucía extends TestCase{
 	public void testSacarDineroDImporteDemasiadoGrande() {
 		try {
 			this.tarjetaDVarian.sacarDinero(1234, 99999);
-		} catch (TarjetaBloqueadaException | PinInvalidoException | ImporteInvalidoException e) {
-			fail("Una excepción: " + e.getMessage());
+			fail("Se esperaba SaldoInsuficienteException");
 		} catch ( SaldoInsuficienteException e) {
-			fail("Saldo insuficiente: " + e.getMessage());
+			
+		} catch (Exception e) {
+			fail("Se esperaba SaldoInsuficienteException");
 		}
 	}
-	
 	
 	@Test
 	public void testAddTitular() {
 		Cliente alleria = new Cliente ("01234P", "Alleria", "Brisaveloz");
+		Cuenta cuentaAlleria = new Cuenta (2); 
 		try {
-			cuentaVarian.addTitular(alleria);
-			assertTrue(cuentaVarian.getTitulares().contains(alleria));
+			cuentaAlleria.addTitular(alleria);
+			assertTrue(cuentaAlleria.getTitulares().contains(alleria));
 		} catch (CuentaYaCreadaException e) {
 			fail("Cuenta ya creada: " + e.getMessage());
 		}
 	}
+	
+	@Test
+	public void testAddTitularCuentaCreada() {
+		Cliente alleria = new Cliente ("01234P", "Alleria", "Brisaveloz");
+		try {
+			cuentaVarian.addTitular(alleria);
+			assertTrue(cuentaVarian.getTitulares().contains(alleria));
+			fail("Se esperaba CuentaYaCreadaException");
+		} catch (CuentaYaCreadaException e) {
 
+		} catch (Exception e) {
+			fail("Se esperaba CuentaYaCreadaException");
+		}
+	}
 }
