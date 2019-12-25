@@ -8,6 +8,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 
 import edu.uclm.esi.iso2.banco20193capas.model.Cuenta;
 import edu.uclm.esi.iso2.banco20193capas.model.Manager;
+import edu.uclm.esi.iso2.banco20193capas.model.MovimientoTarjetaCredito;
 import edu.uclm.esi.iso2.banco20193capas.exceptions.CuentaInvalidaException;
 import edu.uclm.esi.iso2.banco20193capas.exceptions.CuentaSinTitularesException;
 import edu.uclm.esi.iso2.banco20193capas.exceptions.CuentaYaCreadaException;
@@ -46,7 +47,7 @@ public class TestLucía extends TestCase{
 		try {
 			this.cuentaVarian.addTitular(varian);
 			this.cuentaVarian.insert();
-			this.cuentaVarian.ingresar(5000);
+			this.cuentaVarian.ingresar(20000);
 			this.tarjetaCVarian = this.cuentaVarian.emitirTarjetaCredito(varian.getNif(), 2000);
 			this.tarjetaCVarian.cambiarPin(this.tarjetaCVarian.getPin(), 1234);
 			this.tarjetaDVarian = this.cuentaVarian.emitirTarjetaDebito(varian.getNif());
@@ -63,11 +64,21 @@ public class TestLucía extends TestCase{
 	
 	@Test
 	public void testSacarDineroD() {
-		
-	}
+		int pin = 1234;
+		int importe = 20;
+		try {
+			this.tarjetaDVarian.comprobar(pin);
+			assertTrue(pin == tarjetaDVarian.getPin());
+			this.tarjetaDVarian.cuenta.retirar(importe);
+			assertTrue(tarjetaDVarian.getCuenta().getSaldo() == 19980);
+		} catch (Exception e) {
+			fail("Excepción inesperada: " + e.getMessage());
+		}
+	}	
+	
 	
 	@Test
-	public void testAnadirTitular() {
+	public void testAddTitular() {
 		
 	}
 
