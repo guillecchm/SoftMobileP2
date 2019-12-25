@@ -116,7 +116,13 @@ public class TestLucía extends TestCase{
 	
 	@Test
 	public void testAddTitular() {
-		
+		Cliente alleria = new Cliente ("01234P", "Alleria", "Brisaveloz");
+		try {
+			cuentaVarian.addTitular(alleria);
+			assertTrue(cuentaVarian.getTitulares().contains(alleria));
+		} catch (CuentaYaCreadaException e) {
+			fail("Cuenta ya creada: " + e.getMessage());
+		}
 	}
 
 }
