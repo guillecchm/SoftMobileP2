@@ -117,7 +117,6 @@ public class Test_Guillermo extends TestCase {
 			tcPepe = this.cuentaPepe.emitirTarjetaCredito(pepe.getNif(), 2000);
 			assert(tcPepe.getTitular().getNif().equals(pepe.getNif()));
 			assert(tcPepe.getCredito() == 2000);
-			
 		}catch (Exception e) {
 			fail("No se esperaba ninguna excepción: " + e.getMessage());
 		}
