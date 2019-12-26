@@ -7,8 +7,7 @@ import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 
 /**
- * Representa un movimiento en una cuenta bancaria
- * 
+ * Representa un movimiento en una cuenta bancaria.
  * @author Macario
  */
 @Entity
