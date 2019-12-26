@@ -62,6 +62,7 @@ public class Test_Guillermo extends TestCase {
 	public void testPinOK() {
 			try {
 				this.tcPepe.comprobar(1234);
+				assert(this.tcPepe.getPin()==1234);
 			} catch (Exception e) {
 				fail("No se esperaba excepción: " + e.getMessage());
 			}
@@ -114,7 +115,8 @@ public class Test_Guillermo extends TestCase {
 	public void testEmitirTarjetaCreditoOK() {
 		try {
 			tcPepe = this.cuentaPepe.emitirTarjetaCredito(pepe.getNif(), 2000);
-			
+			assert(tcPepe.getTitular().getNif().equals(pepe.getNif()));
+			assert(tcPepe.getCredito() == 2000);
 		}catch (Exception e) {
 			fail("No se esperaba ninguna excepción: " + e.getMessage());
 		}
@@ -150,7 +152,7 @@ public class Test_Guillermo extends TestCase {
 	public void testEmitirTarjetaDebitoOK() {
 		try {
 			tdPepe = this.cuentaPepe.emitirTarjetaDebito(pepe.getNif());
-			
+			assert(tdPepe.getTitular().getNif().equals(pepe.getNif()));
 		}catch (Exception e) {
 			fail("No se esperaba ninguna excepción: " + e.getMessage());
 		}
