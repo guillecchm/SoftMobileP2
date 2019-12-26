@@ -8,10 +8,10 @@ import edu.uclm.esi.iso2.banco20193capas.model.Cuenta;
  * @author Macario
  */
 @SpringBootApplication
-public final class Lanzadora {
+public class Lanzadora {
 
 	/**
-	 * MAIN CLASS
+	 * MAIN CLASS.
 	 * @param args
 	 * @throws Exception
 	 */
