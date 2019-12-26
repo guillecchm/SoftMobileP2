@@ -7,9 +7,12 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
 @Entity
+/**
+ * @author Macario.
+ */
 public class Cliente {
 	@Id @GeneratedValue(strategy = GenerationType.AUTO)
-	private Long id;
+	private Long identificador;
 	@Column(unique = true)
 	protected String nif;
 	
@@ -26,34 +29,45 @@ public class Cliente {
 	 * @param nombre	Nombre del cliente
 	 * @param apellidos	Apellidos del cliente
 	 */
-	public Cliente(String nif, String nombre, String apellidos) {
+	public Cliente(final String nif, final String nombre, final String apellidos) {
 		this.nif = nif;
 		this.nombre = nombre;
 		this.apellidos = apellidos;
 	}
-
-	public Long getId() {
-		return id;
+	/**
+	 * @return identificador.
+	 */
+	public final Long getId() {
+		return identificador;
 	}
-	public void setId(Long id) {
-		this.id = id;
+	public final void setId(Long id) {
+		this.identificador = id;
 	}
-	public String getNif() {
+	/**
+	 * @return nif.
+	 */
+	public final String getNif() {
 		return nif;
 	}
-	public void setNif(String nif) {
+	public final void setNif(String nif) {
 		this.nif = nif;
 	}
-	public String getNombre() {
+	/**
+	 * @return nombre
+	 */
+	public final String getNombre() {
 		return nombre;
 	}
-	public void setNombre(String nombre) {
+	public final void setNombre(String nombre) {
 		this.nombre = nombre;
 	}
-	public String getApellidos() {
+	/**
+	 * @return apellidos
+	 */
+	public final String getApellidos() {
 		return apellidos;
 	}
-	public void setApellidos(String apellidos) {
+	public final void setApellidos(String apellidos) {
 		this.apellidos = apellidos;
 	}
 	
