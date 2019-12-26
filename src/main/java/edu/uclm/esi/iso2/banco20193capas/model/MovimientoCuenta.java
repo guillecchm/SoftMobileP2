@@ -6,7 +6,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 
-/**
+/**.
  * Representa un movimiento en una cuenta bancaria.
  * @author Macario
  */
@@ -20,55 +20,71 @@ public class MovimientoCuenta {
     private double importe;
     private String concepto;
 
-    /**
+    /**.
      * empty constructor.
+     * this constructor is empty.
      */
     public MovimientoCuenta() {
     }
 
-    /**
+    /**.
      * Constructor.
-     * 
-     * @param cuenta
-     * @param importe
-     * @param concepto
+     * @param cuentA
+     * @param importE
+     * @param conceptO
      */
-    public MovimientoCuenta(final Cuenta cuenta, final double importe,
-            final String concepto) {
-        this.importe = importe;
-        this.concepto = concepto;
-        this.cuenta = cuenta;
+    public MovimientoCuenta(final Cuenta cuentA, final double importE,
+            final String conceptO) {
+        this.importe = importE;
+        this.concepto = conceptO;
+        this.cuenta = cuentA;
     }
 
+    /**.
+     * getID().
+     * @return id
+     */
     public Long getId() {
         return id;
     }
 
-    public void setId(Long id) {
-        this.id = id;
+    public void setId(final Long identification) {
+        this.id = identification;
     }
 
+    /**.
+     * getCuenta().
+     * @return cuenta
+     */
     public Cuenta getCuenta() {
         return cuenta;
     }
 
-    public void setCuenta(final Cuenta cuenta) {
-        this.cuenta = cuenta;
+    public void setCuenta(final Cuenta cuentA) {
+        this.cuenta = cuentA;
     }
 
+    /**.
+     * getImporte().
+     * @return importe
+     */
     public double getImporte() {
         return importe;
     }
 
-    public void setImporte(final double importe) {
-        this.importe = importe;
+    public void setImporte(final double importE) {
+        this.importe = importE;
     }
 
+    /**.
+     * getConcepto().
+     * @return concepto
+     */
     public String getConcepto() {
         return concepto;
     }
 
-    public void setConcepto(final String concepto) {
-        this.concepto = concepto;
+    public void setConcepto(final String conceptO) {
+        this.concepto = conceptO;
     }
 }

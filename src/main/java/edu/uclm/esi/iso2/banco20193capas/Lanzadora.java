@@ -13,11 +13,14 @@ public class Lanzadora {
 
     /**
      * MAIN CLASS.
-     * 
      * @param args
      * @throws Exception
      */
     public static void main(final String[] args) throws Exception {
+        /**
+         * @param Lanzadora.class
+         * @param args
+         */
         SpringApplication.run(Lanzadora.class, args);
 
         try {

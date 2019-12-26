@@ -9,9 +9,9 @@ import edu.uclm.esi.iso2.banco20193capas.model.Cliente;
  */
 public interface ClienteDAO extends CrudRepository<Cliente, Long> {
     /**
-     * doc.
+     * llamada.
      * @param nif
-     * @return
+     * @return no return
      */
     Optional<Cliente> findByNif(String nif);
 }
