@@ -1,7 +1,14 @@
 package edu.uclm.esi.iso2.banco20193capas.exceptions;
 
+/**
+ * clase LoginException.
+ * @author Macario
+ */
 public class LoginException extends Exception {
-	public LoginException() {
-		super("Credenciales inválidas");
-	}
+    /**
+     * constructor.
+     */
+    public LoginException() {
+        super("Credenciales inválidas");
+    }
 }

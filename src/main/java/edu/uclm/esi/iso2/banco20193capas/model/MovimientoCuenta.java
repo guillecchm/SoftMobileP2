@@ -6,58 +6,85 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 
-/**
- * Representa un movimiento en una cuenta bancaria
- * 
+/**.
+ * Representa un movimiento en una cuenta bancaria.
+ * @author Macario
  */
 @Entity
 public class MovimientoCuenta {
-	@Id @GeneratedValue(strategy = GenerationType.AUTO) 
-	private Long id;
-	@ManyToOne
-	private Cuenta cuenta;
-	
-	private double importe;
-	private String concepto;
-	
-	public MovimientoCuenta() {
-	}
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private Long id;
+    @ManyToOne
+    private Cuenta cuenta;
+    private double importe;
+    private String concepto;
 
-	public MovimientoCuenta(Cuenta cuenta, double importe, String concepto) {
-		this.importe = importe;
-		this.concepto = concepto;
-		this.cuenta = cuenta;
-	}
+    /**.
+     * empty constructor.
+     * this constructor is empty.
+     */
+    public MovimientoCuenta() {
+    }
 
-	public Long getId() {
-		return id;
-	}
+    /**.
+     * Constructor.
+     * @param cuentA
+     * @param importE
+     * @param conceptO
+     */
+    public MovimientoCuenta(final Cuenta cuentA, final double importE,
+            final String conceptO) {
+        this.importe = importE;
+        this.concepto = conceptO;
+        this.cuenta = cuentA;
+    }
 
-	public void setId(Long id) {
-		this.id = id;
-	}
+    /**.
+     * getID().
+     * @return id
+     */
+    public Long getId() {
+        return id;
+    }
 
-	public Cuenta getCuenta() {
-		return cuenta;
-	}
+    public void setId(final Long identification) {
+        this.id = identification;
+    }
 
-	public void setCuenta(Cuenta cuenta) {
-		this.cuenta = cuenta;
-	}
+    /**.
+     * getCuenta().
+     * @return cuenta
+     */
+    public Cuenta getCuenta() {
+        return cuenta;
+    }
 
-	public double getImporte() {
-		return importe;
-	}
+    public void setCuenta(final Cuenta cuentA) {
+        this.cuenta = cuentA;
+    }
 
-	public void setImporte(double importe) {
-		this.importe = importe;
-	}
+    /**.
+     * getImporte().
+     * @return importe
+     */
+    public double getImporte() {
+        return importe;
+    }
 
-	public String getConcepto() {
-		return concepto;
-	}
+    public void setImporte(final double importE) {
+        this.importe = importE;
+    }
 
-	public void setConcepto(String concepto) {
-		this.concepto = concepto;
-	}
+    /**.
+     * getConcepto().
+     * @return concepto
+     */
+    public String getConcepto() {
+        return concepto;
+    }
+
+    public void setConcepto(final String conceptO) {
+        this.concepto = conceptO;
+    }
 }
