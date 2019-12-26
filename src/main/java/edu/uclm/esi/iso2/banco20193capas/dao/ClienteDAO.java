@@ -13,5 +13,6 @@ public interface ClienteDAO extends CrudRepository<Cliente, Long> {
      * @param nif
      * @return no return
      */
+public interface ClienteDAO extends CrudRepository<Cliente, Long> {
     Optional<Cliente> findByNif(String nif);
 }
