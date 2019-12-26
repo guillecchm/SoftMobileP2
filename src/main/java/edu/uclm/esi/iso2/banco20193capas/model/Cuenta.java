@@ -82,7 +82,7 @@ public class Cuenta {
 		this.retirar(importe, "Retirada de efectivo");
 	}
 		
-	private void retirar(double importe, String concepto) throws ImporteInvalidoException, SaldoInsuficienteException {
+	public void retirar(double importe, String concepto) throws ImporteInvalidoException, SaldoInsuficienteException {
 		if (importe<=0)
 			throw new ImporteInvalidoException(importe);
 		if (importe>getSaldo())
