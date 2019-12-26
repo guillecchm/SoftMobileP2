@@ -172,7 +172,35 @@
 				</reportSets>
 			</plugin>
 			
-			
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-pmd-plugin</artifactId>
+				<version>3.8</version>
+				<configuration>
+					<rulesets>
+						<ruleset>/rulesets/java/basic.xml</ruleset>
+						<ruleset>/rulesets/java/imports.xml</ruleset>
+						<ruleset>/rulesets/java/unnecessary.xml</ruleset>
+						<ruleset>/rulesets/java/braces.xml</ruleset>
+						<ruleset>/rulesets/java/naming.xml</ruleset>
+						<ruleset>/rulesets/java/design.xml</ruleset>
+						<ruleset>/rulesets/java/coupling.xml</ruleset>
+						<ruleset>/rulesets/java/controversial.xml</ruleset>
+						<ruleset>/rulesets/java/optimizations.xml</ruleset>
+					</rulesets>
+					<targetJdk>1.8</targetJdk>
+					<reportSets>
+						<reportSet>
+							<reports>
+								<report>pmd</report>
+								<report>cpd</report>
+							</reports>
+						</reportSet>
+					</reportSets>
+				</configuration>
+			</plugin>
+
+
 			<plugin>
 				<groupId>org.codehaus.mojo</groupId>
 				<artifactId>findbugs-maven-plugin</artifactId>
