@@ -13,8 +13,8 @@ public class Lanzadora {
 
     /**
      * MAIN CLASS.
-     * @param args
-     * @throws Exception
+     * @param args argumentos para ejecutar el programa.
+     * @throws Exception Excepción
      */
     public static void main(final String[] args) throws Exception {
         /**

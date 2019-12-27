@@ -213,8 +213,8 @@ public class Cuenta {
      */
     public TarjetaDebito emitirTarjetaDebito(final String nif)
             throws ClienteNoEncontradoException, ClienteNoAutorizadoException {
-        final Optional<Cliente> optCliente = Manager.getClienteDAO()
-                .findByNif(nif);
+        final Optional<Cliente> optCliente = Manager.getClienteDAO().
+                findByNif(nif);
         if (!optCliente.isPresent()) {
             throw new ClienteNoEncontradoException(nif);
         }

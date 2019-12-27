@@ -29,9 +29,9 @@ public class MovimientoCuenta {
 
     /**.
      * Constructor.
-     * @param cuentA
-     * @param importE
-     * @param conceptO
+     * @param cuentA La cuenta en la que se realiza el movimiento.
+     * @param importE El importe del movimiento.
+     * @param conceptO Concepto del movimiento.
      */
     public MovimientoCuenta(final Cuenta cuentA, final double importE,
             final String conceptO) {

@@ -7,19 +7,15 @@ import org.springframework.data.repository.CrudRepository;
 import edu.uclm.esi.iso2.banco20193capas.model.MovimientoTarjetaCredito;
 
 /**
- * .
  *
  * Esta clase
  *
- * @author: julio
+ * @author: Julio
  *
  * @version: 22/09/2019/A
  */
 
 public interface MovimientoTarjetaCreditoDAO
-        /**
-         *
-         */
         extends CrudRepository<MovimientoTarjetaCredito, Long> {
 
     /**

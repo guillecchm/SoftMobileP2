@@ -1,15 +1,15 @@
 package edu.uclm.esi.iso2.banco20193capas.exceptions;
 /**
  *
- * @author aspi4
+ * @author Macario
  *
  */
 public class CuentaYaCreadaException extends Exception {
-    /**.
+    /**
      *
-     * Esta clase
-     *
-     * @author: julio
+     * Excepción que salta cuando la cuenta está creada y no admite añadir
+     * titurales.
+     * @author: Macario
      *
      * @version: 22/09/2019/A
      */
