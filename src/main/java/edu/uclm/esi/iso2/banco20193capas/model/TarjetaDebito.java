@@ -16,7 +16,7 @@ import edu.uclm.esi.iso2.banco20193capas.exceptions.TarjetaBloqueadaException;
  *
  */
 @Entity
-public final class TarjetaDebito extends Tarjeta {
+public class TarjetaDebito extends AbstractTarjeta {
 
     /**
      * Permite sacar dinero del cajero automático.
