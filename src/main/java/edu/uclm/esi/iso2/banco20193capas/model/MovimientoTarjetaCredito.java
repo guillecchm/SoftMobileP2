@@ -7,68 +7,136 @@ import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 
 /**
- * Representa un movimiento asociado a una tarjeta de crédito
+ * . Representa un movimiento asociado a una tarjeta de crédito
  *
  */
 @Entity
 public class MovimientoTarjetaCredito {
-	@Id @GeneratedValue(strategy = GenerationType.AUTO) 
-	private Long id;
-	@ManyToOne
-	private TarjetaCredito tarjeta;
-	
-	private double importe;
-	private String concepto;
-	private boolean liquidado;
-	
-	public MovimientoTarjetaCredito() {
-	}
+    /**
+     *
+     */
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private Long id;
+    /**
+     *
+     */
+    @ManyToOne
+    private TarjetaCredito tarjeta;
+    /**
+     *
+     */
+    private double importe;
 
-	public MovimientoTarjetaCredito(TarjetaCredito tarjeta, double importe, String concepto) {
-		this.importe = importe;
-		this.concepto = concepto;
-		this.tarjeta = tarjeta;
-	}
+    /**
+     *
+     */
+    private String concepto;
+    /**
+     *
+     */
+    private boolean liquidado;
 
-	public Long getId() {
-		return id;
-	}
+    /**
+     *
+     */
+    public MovimientoTarjetaCredito() {
+    }
 
-	public void setId(Long id) {
-		this.id = id;
-	}
+    /**
+     *
+     *@param concepto is
+     *@param tarjeta is
+     *@param importe is
+     */
+    public MovimientoTarjetaCredito(final TarjetaCredito tarjeta,
+            final double importe, final String concepto) {
+        this.importe = importe;
+        this.concepto = concepto;
+        this.tarjeta = tarjeta;
+    }
 
-	public TarjetaCredito getTarjeta() {
-		return tarjeta;
-	}
+    /**
+     * @return is
+     *
+     */
+    public Long getId() {
+        return id;
+    }
 
-	public void setTarjeta(TarjetaCredito tarjeta) {
-		this.tarjeta = tarjeta;
-	}
+    /**
+     *
+     * @param id is
+     */
+    public void setId(final Long id) {
+        this.id = id;
+    }
 
-	public double getImporte() {
-		return importe;
-	}
+    /**
+     *
+     * @return is
+     */
+    public TarjetaCredito getTarjeta() {
+        return tarjeta;
+    }
 
-	public void setImporte(double importe) {
-		this.importe = importe;
-	}
+    /**
+     * @param tarjeta is
+     *
+     */
+    public void setTarjeta(final TarjetaCredito tarjeta) {
+        this.tarjeta = tarjeta;
+    }
 
-	public String getConcepto() {
-		return concepto;
-	}
+    /**
+     * @return is
+     *
+     */
+    public double getImporte() {
+        return importe;
+    }
 
-	public void setConcepto(String concepto) {
-		this.concepto = concepto;
-	}
+    /**
+     * @param importe is
+     *
+     */
+    public void setImporte(final double importe) {
+        this.importe = importe;
+    }
 
-	public boolean isLiquidado() {
-		return liquidado;
-	}
+    /**
+     * @return is
+     *
+     */
+    public String getConcepto() {
+        return concepto;
+    }
 
-	public void setLiquidado(boolean liquidado) {
-		this.liquidado = liquidado;
-	}
-	
-	
+    /**
+     * @param concepto is
+     *
+     */
+    public void setConcepto(final String concepto) {
+        this.concepto = concepto;
+    }
+
+    /**
+     *@return is
+     *
+     */
+    public boolean isLiquidado() {
+        return liquidado;
+    }
+
+    /**
+     *
+     *@param liquidado is
+     */
+    public void setLiquidado(final boolean liquidado) {
+        /**
+         *
+         */
+        this.liquidado = liquidado;
+    }
+
 }
